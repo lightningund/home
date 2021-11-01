@@ -4,7 +4,6 @@ const links = [
 	["Voronoi Mapper", "voronoi.js"],
 	["Maze Generator", "maze.js"],
 	["Ping", "pong.js"],
-	["Calculator", "calculator.js"],
 	["Snake", "snake.js"],
 	["Solitaire", "solitaire.js"],
 	["Tetris", "tetris.js"]
