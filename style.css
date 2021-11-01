@@ -1,0 +1,20 @@
+ul {
+	list-style-type: none;
+	margin: 0px;
+	padding: 0px;
+}
+li a {
+	float: left;
+	display: block;
+	padding: 8px;
+	background-color: #dddddd;
+	text-decoration: none;
+	color: #000000;
+}
+li a:hover {
+	background-color: #bbbbbb;
+}
+li a.active {
+	background-color: #5050aa;
+	color: #ffffff;
+}
