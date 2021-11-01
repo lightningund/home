@@ -36,7 +36,6 @@ import { Button, Vector2 as Vector, logb } from "https://lightningund.github.io/
 			this.updatePos = () => {
 				this.vel.add(this.acc);
 				this.pos.add(this.vel);
-				this.pos = vectorLimit(this.pos, {x:0, y:0}, this.wallLimit);
 			}
 
 			//checks if state is equal to zero (meaning it is a player)
@@ -44,8 +43,9 @@ import { Button, Vector2 as Vector, logb } from "https://lightningund.github.io/
 				this.pos = new Vector(WIDTH / 2, HEIGHT - 20);
 
 				this.boundCheck = () => {
-					this.vel = vectorLimit(this.vel, {x:-SPD, y:-SPD}, {x:SPD, y:SPD});
+					vectorLimit(this.vel, {x:-SPD, y:-SPD}, {x:SPD, y:SPD});
 					this.vel.scale(FRICTION);
+					vectorLimit(this.pos, {x:0, y:0}, this.wallLimit);
 				};
 
 				this.update = () => {
@@ -113,12 +113,18 @@ import { Button, Vector2 as Vector, logb } from "https://lightningund.github.io/
 							const dist = repulsion.squareLength();
 							repulsion.normalize();
 							repulsion.scale(BASE_REPEL_FORCE / dist);
-							this.acc.add(repulsion);
+							this.vel.add(repulsion);
 						}
 					}
 				};
 			}
 		}
+	}
+
+	const limit = (limitee, min, max) => {
+		if(limitee < min) return min;
+		if(limitee > max) return max;
+		return limitee;
 	}
 
 	/**
@@ -128,9 +134,8 @@ import { Button, Vector2 as Vector, logb } from "https://lightningund.github.io/
 	 * @return {Vector}
 	 */
 	const vectorLimit = (limitee, min, max) => {
-		const x = Math.min(Math.max(limitee.x, min.x), max.x);
-		const y = Math.min(Math.max(limitee.y, min.y), max.y);
-		return new Vector(x, y);
+		limitee.x = limit(limitee.x, min.x, max.x);
+		limitee.y = limit(limitee.y, min.y, max.y);
 	};
 
 	/**
@@ -243,10 +248,10 @@ import { Button, Vector2 as Vector, logb } from "https://lightningund.github.io/
 		//using enemies built-in move function to move them
 		for (const enem of enemies) {
 			enem.update(player, enemies);
-			if (overlap(player, enem)) {
-				dead = true;
-				break;
-			}
+			// if (overlap(player, enem)) {
+			// 	dead = true;
+			// 	break;
+			// }
 		}
 		//check if player and the goal cube collide
 		if (overlap(player, cubeGood)) processGood();
