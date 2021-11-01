@@ -248,10 +248,10 @@ import { Button, Vector2 as Vector, logb } from "https://lightningund.github.io/
 		//using enemies built-in move function to move them
 		for (const enem of enemies) {
 			enem.update(player, enemies);
-			// if (overlap(player, enem)) {
-			// 	dead = true;
-			// 	break;
-			// }
+			if (overlap(player, enem)) {
+				dead = true;
+				break;
+			}
 		}
 		//check if player and the goal cube collide
 		if (overlap(player, cubeGood)) processGood();
