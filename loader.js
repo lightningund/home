@@ -20,22 +20,14 @@ navBase.appendChild(document.createElement("br"));
 
 const ul = document.createElement("ul");
 
-const baseFunc = file => {
+const baseFunc = async file => {
 	body.removeChild(body.querySelector("#appDiv"));
-	body.removeChild(body.querySelector("#appScript"));
 
 	let appDiv = document.createElement("div");
 	appDiv.id = "appDiv";
 	body.appendChild(appDiv);
 
-	let appScript = document.createElement("script");
-	appScript.id = "appScript";
-	if(file != "") {
-		appScript.setAttribute("src", "apps/" + file);
-		appScript.setAttribute("type", "module");
-	}
-
-	body.appendChild(appScript);
+	if(file != "") (await import("./apps/" + file)).run();
 }
 
 for(const link of links) {

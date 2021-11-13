@@ -16,7 +16,7 @@ import { Deck, Card } from "https://lightningund.github.io/Methlib/methlib.js";
 
 // Wrap the entire program in an anonymous function that is instantly executed
 // This allows to us to have constants that don't bleed outside the scope of this app
-(() => {
+export const run = (() => {
 	class cardClick {
 		constructor() {
 			this.clickType;
@@ -346,7 +346,7 @@ import { Deck, Card } from "https://lightningund.github.io/Methlib/methlib.js";
 	canv.addEventListener("dblclick", e => flipCardFunc(mousePos, true));
 	canv.addEventListener("mousemove", e => mousePos = getMousePos(canv, e));
 
-	window.addEventListener("keydown", e => {
+	canv.addEventListener("keydown", e => {
 		if(e.code == "KeyF") flipCardFunc(mousePos);
 		else if(e.code == "Space") makeFullScreen();
 		else if(e.code == "KeyE"){
@@ -371,4 +371,4 @@ import { Deck, Card } from "https://lightningund.github.io/Methlib/methlib.js";
 	deck.shuffle();
 
 	deal(deck);
-})();
+});

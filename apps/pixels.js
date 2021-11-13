@@ -8,9 +8,9 @@ import { Button, Vector2 as Vector, logb } from "https://lightningund.github.io/
  * @property {number} h
  */
 
-// Wrap the entire program in an anonymous function that is instantly executed
+// Wrap the entire program in a function
 // This allows to us to have constants that don't bleed outside the scope of this app
-(() => {
+export const run = (() => {
 	class Cube {
 		constructor(state, diff) {
 			const enemPosInc = (WIDTH - 40) / 2;
@@ -190,7 +190,7 @@ import { Button, Vector2 as Vector, logb } from "https://lightningund.github.io/
 	let dead = true;
 	let diff = 0;
 
-	window.addEventListener("keydown", e => {
+	canv.addEventListener("keydown", e => {
 		keys[e.code] = true;
 		if (dead && e.code == "KeyE") {
 			diff++;
@@ -199,14 +199,14 @@ import { Button, Vector2 as Vector, logb } from "https://lightningund.github.io/
 		}
 	}, false);
 	
-	window.addEventListener("keyup", e => delete keys[e.code], false);
+	canv.addEventListener("keyup", e => delete keys[e.code], false);
 
 	//Binding the click event on the canv
 	canv.addEventListener("click", e => {
 		if (dead) {
-			let mousePos = getMousePos(canv, e);
+			const mousePos = getMousePos(canv, e);
 
-			for (let button of buttons) {
+			for (const button of buttons) {
 				if (button.wasClicked(mousePos)) {
 					button.onClick();
 				}
@@ -216,9 +216,10 @@ import { Button, Vector2 as Vector, logb } from "https://lightningund.github.io/
 
 	//Get the mouse position
 	const getMousePos = (canv, event) => {
-		var rect = canv.getBoundingClientRect();
+		const rect = canv.getBoundingClientRect();
 		return {
-			x: event.clientX - rect.left,y: event.clientY - rect.top
+			x: event.clientX - rect.left,
+			y: event.clientY - rect.top
 		};
 	};
 
@@ -270,7 +271,7 @@ import { Button, Vector2 as Vector, logb } from "https://lightningund.github.io/
 		//enemies
 		context.fillStyle = "blue";
 		for (const enem of enemies) {
-			context.fillRect(enem.pos.x,enem.pos.y,enem.size.x,enem.size.y);
+			context.fillRect(enem.pos.x, enem.pos.y, enem.size.x, enem.size.y);
 		}
 		//score
 		let x = 35 + Math.floor(logb(score, 10)) * 14;
@@ -291,9 +292,9 @@ import { Button, Vector2 as Vector, logb } from "https://lightningund.github.io/
 		for (let i = 0; i < buttons.length; i++) {
 			context.fillStyle = diffCols[i];
 			if (i == diff) {
-				context.strokeRect(buttons[i].pos.x,buttons[i].pos.y,buttons[i].size.x,buttons[i].size.y);
+				context.strokeRect(buttons[i].pos.x, buttons[i].pos.y, buttons[i].size.x, buttons[i].size.y);
 			} else {
-				context.fillRect(buttons[i].pos.x,buttons[i].pos.y,buttons[i].size.x,buttons[i].size.y);
+				context.fillRect(buttons[i].pos.x, buttons[i].pos.y, buttons[i].size.x, buttons[i].size.y);
 			}
 		}
 		if (keys[32]) {
@@ -318,4 +319,4 @@ import { Button, Vector2 as Vector, logb } from "https://lightningund.github.io/
 			render();
 		} else gameOver();
 	}, 1000 / 30);
-})();
+});

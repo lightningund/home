@@ -1,6 +1,6 @@
 // Wrap the entire program in an anonymous function that is instantly executed
 // This allows to us to have constants that don't bleed outside the scope of this app
-(() => {
+export const run = (() => {
 	const baseDiv = document.querySelector("#appDiv");
 
 	const WIDTH = 800;
@@ -178,7 +178,7 @@
 		if(playerDirection != (dir + 2) % 4) playerDirection = dir;
 	}
 
-	window.addEventListener("keydown", e => {
+	canv.addEventListener("keydown", e => {
 		switch (e.code) {
 			case "ArrowUp":
 			case "KeyW":
@@ -205,4 +205,4 @@
 
 		frameCount++;
 	}, 1000/60);
-})();
+});

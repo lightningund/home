@@ -3,7 +3,7 @@ import { logb } from "https://lightningund.github.io/Methlib/methlib.js";
 
 // Wrap the entire program in an anonymous function that is instantly executed
 // This allows to us to have constants that don't bleed outside the scope of this app
-(() => {
+export const run = (() => {
 	const baseDiv = document.querySelector("#appDiv");
 
 	const WIDTH = 800;
@@ -350,7 +350,7 @@ import { logb } from "https://lightningund.github.io/Methlib/methlib.js";
 		}
 	}
 
-	window.addEventListener("keydown", e => {
+	canv.addEventListener("keydown", e => {
 		switch (e.code) {
 			case "Space": // Space : Quick Drop
 				pieceY = pseudoDrop();
@@ -432,4 +432,4 @@ import { logb } from "https://lightningund.github.io/Methlib/methlib.js";
 		update();
 		render();
 	}, 1000 / 60);
-})();
+});

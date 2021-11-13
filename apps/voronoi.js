@@ -1,6 +1,6 @@
-// Wrap the entire program in an anonymous function that is instantly executed
+// Wrap the entire program in a function
 // This allows to us to have constants that don't bleed outside the scope of this app
-(() => {
+export const run = (() => {
 	const baseDiv = document.querySelector("#appDiv");
 
 	const WIDTH = 800;
@@ -18,7 +18,7 @@
 	const imgDat = context.getImageData(0, 0, WIDTH, HEIGHT);
 
 	// Keyboard events
-	window.addEventListener("keydown", evt => {
+	canv.addEventListener("keydown", evt => {
 		if(evt.code === "KeyC") {
 			clicks = [];
 			pixelMinDists = [];
@@ -63,4 +63,4 @@
 		
 		context.putImageData(imgDat, 0, 0);
 	}
-})();
+});

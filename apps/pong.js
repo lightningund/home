@@ -1,6 +1,6 @@
 // Wrap the entire program in an anonymous function that is instantly executed
 // This allows to us to have constants that don't bleed outside the scope of this app
-(() => {
+export const run = (() => {
 	const baseDiv = document.querySelector("#appDiv");
 
 	const WIDTH = 800;
@@ -36,12 +36,8 @@
 	let playerY = 0;
 	let aiY = 0;
 
-	window.addEventListener("keydown", e => {
-		keys[e.code] = true;
-	}, false);
-	window.addEventListener("keyup", e => {
-		delete keys[e.code];
-	}, false);
+	canv.addEventListener("keydown", e => keys[e.code] = true, false);
+	canv.addEventListener("keyup", e => delete keys[e.code], false);
 
 	const update = () => {
 		ball.x += ball.vx;
@@ -105,4 +101,4 @@
 			if(keys["Space"]) reset();
 		}
 	}, 1000/30);
-})();
+});

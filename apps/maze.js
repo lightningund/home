@@ -1,6 +1,6 @@
 // Wrap the entire program in an anonymous function that is instantly executed
 // This allows to us to have constants that don't bleed outside the scope of this app
-(() => {
+export const run = (() => {
 	class Cell {
 		constructor(i, j) {
 			this.x = i;
@@ -142,5 +142,4 @@
 			generate();
 		}
 	}, 1000 / 60);
-
-})();
+});
