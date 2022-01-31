@@ -6,7 +6,9 @@ const links = [
 	["Ping", "pong.js"],
 	["Snake", "snake.js"],
 	["Solitaire", "solitaire.js"],
-	["Tetris", "tetris.js"]
+	["Tetris", "tetris.js"],
+	["Turing Machine", "turing_machine.js"],
+	["Sudoku", "sudoku.js"]
 ];
 
 const body = document.querySelector("body");
@@ -20,14 +22,29 @@ navBase.appendChild(document.createElement("br"));
 
 const ul = document.createElement("ul");
 
+let appscript = undefined;
+
 const baseFunc = async file => {
+	if(appscript !== undefined) {
+		try {
+			appscript.stop();
+		} catch (e) {
+
+		}
+	}
+
 	body.removeChild(body.querySelector("#appDiv"));
 
 	let appDiv = document.createElement("div");
 	appDiv.id = "appDiv";
 	body.appendChild(appDiv);
 
-	if(file != "") (await import("./apps/" + file)).run();
+	if(file !== "") {
+		appscript = await import("./apps/" + file);
+		appscript.run();
+	} else {
+		appscript = undefined;
+	}
 }
 
 for(const link of links) {
