@@ -161,7 +161,7 @@ class Instruction {
 	}
 }
 
-// TODO: FINISH THE F***KING UI
+// TODO: Work on the UI
 
 const addNewInstr = parentDiv => {
     if(parentDiv[0].childElementCount !== 0) {
@@ -309,6 +309,8 @@ const statesDiv = document.createElement("div");
 
 export const run = (async () => {
     await import("https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js");
+	await import("https://unpkg.com/react@17/umd/react.production.min.js");
+	await import("https://unpkg.com/react-dom@17/umd/react-dom.production.min.js");
 
 	const baseDiv = document.getElementById("appDiv");
 	baseDiv.appendChild(canv);
