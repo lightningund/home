@@ -17,7 +17,7 @@ class Rule {
 	 */
 
 	/**
-	 * @param {MarkFunc} checkFunc 
+	 * @param {MarkFunc} checkFunc
 	 */
 	constructor(checkFunc){
 		this.checkFunc = checkFunc;
@@ -60,7 +60,7 @@ class Board {
 				console.log(cell);
 				this.updateCell(cell[0], cell[1]);
 			}
-			
+
 			this.cellsToUpdate = [];
 
 			this.render();
@@ -93,7 +93,7 @@ class Board {
 					const ind = vals.indexOf(checkVal);
 					if (ind !== -1) vals.splice(ind, 1);
 				}
-				
+
 				cell.marks = vals;
 			}
 

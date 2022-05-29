@@ -1,4 +1,4 @@
-import { Deck, Card } from "https://lightningund.github.io/Methlib/methlib.js";
+import { Deck, Card } from "https://lightningund.github.io/Mathlib/mathlib.js";
 
 /**
  * @typedef {Object} Box
@@ -155,8 +155,8 @@ const bindings = {
 };
 
 /**
- * @param {Vector} pos 
- * @param {Box} box 
+ * @param {Vector} pos
+ * @param {Box} box
  * @returns {boolean}
  */
 const pointOverlap = (pos, box) => {
@@ -166,7 +166,7 @@ const pointOverlap = (pos, box) => {
 }
 
 /**
- * @param {Vector} pos 
+ * @param {Vector} pos
  * @returns {boolean}
  */
 const clickedCol = pos => {
@@ -178,7 +178,7 @@ const clickedCol = pos => {
 }
 
 /**
- * @param {Vector} pos 
+ * @param {Vector} pos
  * @returns {boolean}
  */
 const clickedAce = pos => {
@@ -189,7 +189,7 @@ const clickedAce = pos => {
 }
 
 /**
- * @param {Vector} pos 
+ * @param {Vector} pos
  * @returns {boolean}
  */
 const clickedDeck = pos => {
@@ -198,7 +198,7 @@ const clickedDeck = pos => {
 }
 
 /**
- * @param {Vector} pos 
+ * @param {Vector} pos
  * @returns {boolean}
  */
 const clickedFlipped = pos => {
@@ -275,7 +275,7 @@ const initVals = (fullScreen = false) => {
 }
 
 /**
- * @param {cardClick} click 
+ * @param {cardClick} click
  * @returns {boolean}
  */
 const clickSafetyCheck = click => {
@@ -298,7 +298,7 @@ const clickSafetyCheck = click => {
 const flipCardFunc = (mousePos, doubleClick = false) => {
 	let click = new cardClick();
 	click.checkPos(mousePos);
-	
+
 	if(!clickSafetyCheck(click)) return;
 
 	if(click.clickType === "column") cols[click.index1][click.index2].flip();

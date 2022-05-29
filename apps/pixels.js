@@ -1,4 +1,4 @@
-import { Button, Vector2 as Vector, logb } from "https://lightningund.github.io/Methlib/methlib.js";
+import { Button, Vector2 as Vector, logb } from "https://lightningund.github.io/Mathlib/mathlib.js";
 
 class Rect {
 	constructor() {

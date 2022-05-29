@@ -186,7 +186,7 @@ const render = () => {
 }
 
 /**
- * @param {number} dir 
+ * @param {number} dir
  */
 const setPlayerDirection = dir => {
 	if(playerDirection != (dir + 2) % 4) playerDirection = dir;

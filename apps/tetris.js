@@ -1,5 +1,5 @@
 import { PIECES, Cell, Color } from "./tetrisPieces.js";
-import { logb } from "https://lightningund.github.io/Methlib/methlib.js";
+import { logb } from "https://lightningund.github.io/Mathlib/mathlib.js";
 
 const WIDTH = 800;
 const HEIGHT = 800;
@@ -257,9 +257,9 @@ const newPiece = () => {
 		nextTypes = [0, 1, 2, 3, 4, 5, 6];
 		nextTypes = shuffle(nextTypes);
 	}
-	
+
 	if(!checkPiecePosition()) init();
-	
+
 	drawPiece();
 }
 
