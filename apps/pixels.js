@@ -18,7 +18,7 @@ class Rect {
 		/** @type {Vector} */
 		this.size = new Vector(20, 20);
 
-		this.updatePos = () => {
+		this.update_pos = () => {
 			this.vel.add(this.acc);
 			this.pos.add(this.vel);
 		}
@@ -31,18 +31,18 @@ class Player extends Rect {
 
 		this.pos = new Vector(WIDTH / 2, HEIGHT - 20);
 
-		this.wallLimit = new Vector(WIDTH, HEIGHT).sub(this.size);
+		this.wall_limit = new Vector(WIDTH, HEIGHT).sub(this.size);
 
-		this.boundCheck = () => {
-			vectorLimit(this.vel, {x : -this.SPD, y : -this.SPD}, {x : this.SPD, y : this.SPD});
+		this.bound_check = () => {
+			vector_limit(this.vel, {x : -this.SPD, y : -this.SPD}, {x : this.SPD, y : this.SPD});
 			this.vel.scale(this.FRICTION);
-			vectorLimit(this.pos, {x : 0, y : 0}, this.wallLimit);
+			vector_limit(this.pos, {x : 0, y : 0}, this.wall_limit);
 		};
 
 		this.update = () => {
 			this.mover();
-			this.updatePos();
-			this.boundCheck();
+			this.update_pos();
+			this.bound_check();
 		};
 
 		this.mover = () => {
@@ -57,13 +57,13 @@ class Player extends Rect {
 }
 
 class Enemy extends Rect {
-	constructor(enemNum, diff) {
+	constructor(enem_num, diff) {
 		super();
 
-		this.enemPosInc = (WIDTH - 40) / 2;
+		this.enem_pos_inc = (WIDTH - 40) / 2;
 		this.BASE_REPEL_FORCE = 5000;
 
-		this.pos = new Vector(this.enemPosInc * enemNum, 20);
+		this.pos = new Vector(this.enem_pos_inc * enem_num, 20);
 		this.speedup = 1;
 
 		this.update = (target, enems) => {
@@ -72,7 +72,7 @@ class Enemy extends Rect {
 			this.vel.scale(0.9);
 			this.mover(target);
 			this.repel(enems);
-			this.updatePos();
+			this.update_pos();
 			this.speedup *= 1.0001;
 		};
 
@@ -111,7 +111,7 @@ class Goal extends Rect {
 		this.size = new Vector(40, 40);
 
 		// Randomize the position of the goal Rect
-		this.randomizePos = () => {
+		this.randomize_pos = () => {
 			this.pos = new Vector(
 				Math.random() * (WIDTH - 40),
 				Math.random() * (HEIGHT - 40)
@@ -136,22 +136,22 @@ context.font = "Bold 50px Consolas";
 const BS = 100; // Button Size
 
 // Background and button colors for the different difficulties
-const diffCols = ["#00FF00", "#FF8000", "#FF0000"];
+const diff_cols = ["#00FF00", "#FF8000", "#FF0000"];
 
 // The buttons to start the game at any given difficulty
 let buttons = [];
 
 let player;
-let goalRect;
+let goal_rect;
 let enemies = [];
 
-let onMenu = false;
-let bestScores = [0, 0, 0];
+let on_menu = false;
+let best_scores = [0, 0, 0];
 let score = 0;
 let dead = true;
 let diff = 0;
 
-let updateLoop;
+let update_loop;
 
 for (let i = 0; i < 3; i ++) {
 	const x = (WIDTH * (i * 2 + 1)) / 6 - BS / 2;
@@ -187,7 +187,7 @@ const limit = (limitee, min, max) => {
  * @param {Vector} max
  * @return {Vector}
  */
-const vectorLimit = (limitee, min, max) => {
+const vector_limit = (limitee, min, max) => {
 	limitee.x = limit(limitee.x, min.x, max.x);
 	limitee.y = limit(limitee.y, min.y, max.y);
 	return limitee;
@@ -199,12 +199,12 @@ const vectorLimit = (limitee, min, max) => {
  * @returns {boolean}
  */
 const overlap = (a, b) => {
-	const xOverlap = a.pos.x < b.pos.x + b.size.x && b.pos.x < a.pos.x + a.size.x;
-	const yOverlap = a.pos.y < b.pos.y + b.size.y && b.pos.y < a.pos.y + a.size.y;
-	return xOverlap && yOverlap;
+	const x_overlap = a.pos.x < b.pos.x + b.size.x && b.pos.x < a.pos.x + a.size.x;
+	const y_overlap = a.pos.y < b.pos.y + b.size.y && b.pos.y < a.pos.y + a.size.y;
+	return x_overlap && y_overlap;
 }
 
-const getMousePos = (canv, event) => {
+const get_mouse_pos = (canv, event) => {
 	const rect = canv.getBoundingClientRect();
 	return {
 		x: event.clientX - rect.left,
@@ -220,13 +220,13 @@ const start = difficulty => {
 		}
 
 		player = new Player();
-		goalRect = new Goal();
-		goalRect.randomizePos();
+		goal_rect = new Goal();
+		goal_rect.randomize_pos();
 		diff = difficulty - 1;
 		dead = false;
 		score = 0;
-		onMenu = false;
-		context.fillStyle = diffCols[diff];
+		on_menu = false;
+		context.fillStyle = diff_cols[diff];
 		context.fillRect(0, 0, WIDTH, HEIGHT);
 	}
 };
@@ -244,19 +244,19 @@ const update = () => {
 		}
 	}
 	// Check if player and the goal Rect collide
-	if (overlap(player, goalRect)) processGood();
+	if (overlap(player, goal_rect)) process_good();
 };
 
 const render = () => {
 	// Background
-	context.fillStyle = diffCols[diff] + "50";
+	context.fillStyle = diff_cols[diff] + "50";
 	context.fillRect(0, 0, WIDTH, HEIGHT);
 	// Player
 	context.fillStyle = "black";
 	context.fillRect(player.pos.x, player.pos.y, player.size.x, player.size.y);
 	// Goal
 	context.fillStyle = "purple";
-	context.fillRect(goalRect.pos.x, goalRect.pos.y, goalRect.size.x, goalRect.size.y);
+	context.fillRect(goal_rect.pos.x, goal_rect.pos.y, goal_rect.size.x, goal_rect.size.y);
 	// Enemies
 	context.fillStyle = "blue";
 	for (const enem of enemies) {
@@ -269,9 +269,9 @@ const render = () => {
 	context.fillText(score.toString(10), x, 50);
 };
 
-const processGood = () => {
+const process_good = () => {
 	score ++;
-	goalRect.randomizePos();
+	goal_rect.randomize_pos();
 };
 
 const gameOver = () => {
@@ -279,7 +279,7 @@ const gameOver = () => {
 	context.fillRect(0, HEIGHT / 2, WIDTH, HEIGHT / 2);
 
 	for (let i = 0; i < buttons.length; i++) {
-		context.fillStyle = diffCols[i];
+		context.fillStyle = diff_cols[i];
 		if (i === diff) {
 			context.strokeRect(buttons[i].pos.x, buttons[i].pos.y, buttons[i].size.x, buttons[i].size.y);
 		} else {
@@ -289,24 +289,24 @@ const gameOver = () => {
 
 	if (keys[32]) start((diff % 3) + 1);
 
-	if (!onMenu) {
+	if (!on_menu) {
 		context.fillStyle = "black";
-		onMenu = true;
+		on_menu = true;
 		dead = true;
 		context.clearRect(0, 0, WIDTH, HEIGHT);
-		context.fillText("High Score: " + bestScores[diff], WIDTH / 2, 100);
+		context.fillText("High Score: " + best_scores[diff], WIDTH / 2, 100);
 		context.fillText("Last Score: " + score, WIDTH / 2, 200);
 
-		bestScores[diff] = score > bestScores[diff] ? score : bestScores[diff];
+		best_scores[diff] = score > best_scores[diff] ? score : best_scores[diff];
 	}
 };
 
 export const run = () => {
-	const baseDiv = document.querySelector("#appDiv");
+	const base_div = document.querySelector("#appDiv");
 
 	canv.addEventListener("click", e => {
 		if (dead) {
-			const mousePos = getMousePos(canv, e);
+			const mousePos = get_mouse_pos(canv, e);
 
 			for (const button of buttons) {
 				if (button.wasClicked(mousePos)) {
@@ -316,13 +316,13 @@ export const run = () => {
 		}
 	}, false);
 
-	baseDiv.appendChild(canv);
+	base_div.appendChild(canv);
 
 	for(const key of Object.keys(bindings)) {
 		window.addEventListener(key, bindings[key]);
 	}
 
-	updateLoop = setInterval(() => {
+	update_loop = setInterval(() => {
 		if (!dead) {
 			update();
 			render();
@@ -335,5 +335,5 @@ export const stop = () => {
 		window.removeEventListener(key, bindings[key]);
 	}
 
-	clearInterval(updateLoop);
+	clearInterval(update_loop);
 }
