@@ -11,7 +11,6 @@ class Rect {
 	constructor() {
 		this.SPD = 20;
 		this.ACC = 7;
-		this.FRICTION = 0.8;
 
 		/** @type {Vector} */
 		this.pos = new Vector();
@@ -25,10 +24,13 @@ class Rect {
 		/** @type {Vector} */
 		this.size = new Vector(20, 20);
 
+		/**
+		 * General physics update, adds the acceleration to the velocity, and adds the velocity to the position
+		 */
 		this.update_pos = () => {
 			this.vel.add(this.acc);
 			this.pos.add(this.vel);
-		}
+		};
 	}
 }
 
@@ -36,22 +38,36 @@ class Player extends Rect {
 	constructor() {
 		super();
 
+		/** @type {number} */
+		this.FRICTION = 0.8;
+
+		/** @type {Vector} */
 		this.pos = new Vector(WIDTH / 2, HEIGHT - 20);
 
+		/** @type {Vector} */
 		this.wall_limit = new Vector(WIDTH, HEIGHT).sub(this.size);
 
-		this.bound_check = () => {
-			this.vel = vector_limit(this.vel, new Vector(-this.SPD), new Vector(this.SPD));
-			this.vel.scale(this.FRICTION);
-			this.pos = vector_limit(this.pos, {x : 0, y : 0}, this.wall_limit);
-		};
-
+		/**
+		 * Main update function, called every frame
+		 */
 		this.update = () => {
 			this.mover();
 			this.update_pos();
 			this.bound_check();
 		};
 
+		/**
+		 * Limit the velocity and position of the player
+		 */
+		this.bound_check = () => {
+			this.vel = vector_limit(this.vel, new Vector(-this.SPD), new Vector(this.SPD));
+			this.vel.scale(this.FRICTION);
+			this.pos = vector_limit(this.pos, {x : 0, y : 0}, this.wall_limit);
+		};
+
+		/**
+		 * Applies acceleration based on the current keys being held
+		 */
 		this.mover = () => {
 			this.acc.x = 0;
 			this.acc.y = 0;
@@ -67,23 +83,43 @@ class Enemy extends Rect {
 	constructor(enem_num, diff) {
 		super();
 
-		this.enem_pos_inc = (WIDTH - 40) / 2;
+		/** @type {number} */
+		this.FRICTION = 0.9;
+
+		/** @type {number} */
+		this.SPEEDUP = 1.0001;
+
+		/** @type {number} */
 		this.BASE_REPEL_FORCE = 5000;
 
-		this.pos = new Vector(this.enem_pos_inc * enem_num, 20);
-		this.speedup = 1;
+		/** @type {number} */
+		this.enem_pos_inc = (WIDTH - 40) / 2;
 
+		/** @type {number} */
+		this.speed_mod = 1;
+
+		/** @type {Vector} */
+		this.pos = new Vector(this.enem_pos_inc * enem_num, 20);
+
+		/**
+		 * Main update, called every frame
+		 * @param {Rect} target
+		 * @param {Enemy[]} enems
+		 */
 		this.update = (target, enems) => {
 			this.acc.x = 0;
 			this.acc.y = 0;
-			this.vel.scale(0.9);
+			this.vel.scale(this.FRICTION);
 			this.mover(target);
 			this.repel(enems);
 			this.update_pos();
-			this.speedup *= 1.0001;
+			this.speed_mod *= 1.0001;
 		};
 
-		// Move function for enemies
+		/**
+		 * Move function for enemies
+		 * @param {Rect} target
+		 */
 		this.mover = target => {
 			let dx = Vector.sub(target.pos, this.pos);
 			let divisor = 1;
@@ -92,11 +128,14 @@ class Enemy extends Rect {
 			else if (diff === 2) divisor = 50;
 			else if (diff === 3) divisor = 25;
 
-			divisor /= this.speedup;
+			divisor /= this.speed_mod;
 
 			this.acc = dx.scale(1 / divisor);
 		};
 
+		/**
+		 * @param {Enemy[]} enems
+		 */
 		this.repel = enems => {
 			for(const enem of enems) {
 				if(enem !== this) {
@@ -117,7 +156,9 @@ class Goal extends Rect {
 
 		this.size = new Vector(40, 40);
 
-		// Randomize the position of the goal Rect
+		/**
+		 * Randomize the position of the goal Rect
+		 */
 		this.randomize_pos = () => {
 			this.pos = new Vector(
 				Math.random() * (WIDTH - 40),
@@ -127,7 +168,10 @@ class Goal extends Rect {
 	}
 }
 
-// Array for what keys are currently being pressed
+/**
+ * Array for what keys are currently being pressed
+ * @type {boolean[]}
+ */
 let keys = [];
 
 const canv = document.createElement("canvas");
@@ -172,6 +216,9 @@ for (let i = 0; i < 3; i++) {
 	buttons[i] = new Button(() => start(i + 1), x, y, BS, BS);
 }
 
+/**
+ * @param {KeyboardEvent} e
+ */
 const keydownfunc = e => {
 	keys[e.code] = true;
 	if (dead && e.code === "KeyE") {
@@ -179,24 +226,30 @@ const keydownfunc = e => {
 		diff %= 3;
 		console.log(diff);
 	}
-}
+};
 
-const keyupfunc = e => delete keys[e.code];
+/**
+ * @param {KeyboardEvent} e
+ */
+const keyupfunc = e => {delete keys[e.code];};
 
 const bindings = {
 	"keydown": keydownfunc,
 	"keyup": keyupfunc
 };
 
+/**
+ * @param {string[]} keylist
+ */
 const check_keylist = keylist => {
 	return keylist.some(key => keys[key]);
-}
+};
 
 const limit = (limitee, min, max) => {
 	if (limitee < min) return min;
 	if (limitee > max) return max;
 	return limitee;
-}
+};
 
 /**
  * Returns a new vector limited by the given bounds
@@ -218,7 +271,7 @@ const overlap = (a, b) => {
 	const x_overlap = a.pos.x < b.pos.x + b.size.x && b.pos.x < a.pos.x + a.size.x;
 	const y_overlap = a.pos.y < b.pos.y + b.size.y && b.pos.y < a.pos.y + a.size.y;
 	return x_overlap && y_overlap;
-}
+};
 
 /**
  * @param {HTMLCanvasElement} canv
@@ -359,4 +412,4 @@ export const stop = () => {
 	}
 
 	clearInterval(update_loop);
-}
+};
