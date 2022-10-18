@@ -41,7 +41,7 @@ class Player extends Rect {
 		this.wall_limit = new Vector(WIDTH, HEIGHT).sub(this.size);
 
 		this.bound_check = () => {
-			this.vel = vector_limit(this.vel, {x : -this.SPD, y : -this.SPD}, {x : this.SPD, y : this.SPD});
+			this.vel = vector_limit(this.vel, new Vector(-this.SPD), new Vector(this.SPD));
 			this.vel.scale(this.FRICTION);
 			this.pos = vector_limit(this.pos, {x : 0, y : 0}, this.wall_limit);
 		};
