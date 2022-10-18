@@ -34,9 +34,9 @@ class Player extends Rect {
 		this.wall_limit = new Vector(WIDTH, HEIGHT).sub(this.size);
 
 		this.bound_check = () => {
-			vector_limit(this.vel, {x : -this.SPD, y : -this.SPD}, {x : this.SPD, y : this.SPD});
+			this.vel = vector_limit(this.vel, {x : -this.SPD, y : -this.SPD}, {x : this.SPD, y : this.SPD});
 			this.vel.scale(this.FRICTION);
-			vector_limit(this.pos, {x : 0, y : 0}, this.wall_limit);
+			this.pos = vector_limit(this.pos, {x : 0, y : 0}, this.wall_limit);
 		};
 
 		this.update = () => {
@@ -198,9 +198,7 @@ const limit = (limitee, min, max) => {
  * @return {Vector}
  */
 const vector_limit = (limitee, min, max) => {
-	limitee.x = limit(limitee.x, min.x, max.x);
-	limitee.y = limit(limitee.y, min.y, max.y);
-	return limitee;
+	return new Vector(limit(limitee.x, min.x, max.x), limit(limitee.y, min.y, max.y));
 };
 
 /**
