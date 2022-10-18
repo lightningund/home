@@ -138,11 +138,19 @@ const BS = 100; // Button Size
 // Background and button colors for the different difficulties
 const diff_cols = ["#00FF00", "#FF8000", "#FF0000"];
 
-// The buttons to start the game at any given difficulty
+/**
+ * The buttons to start the game at any given difficulty
+ * @type {Button[]}
+ */
 let buttons = [];
 
+/** @type {Player} */
 let player;
+
+/** @type {Goal} */
 let goal_rect;
+
+/** @type {Enemy[]} */
 let enemies = [];
 
 let on_menu = false;
@@ -151,6 +159,7 @@ let score = 0;
 let dead = true;
 let diff = 0;
 
+/** @type {number} */
 let update_loop;
 
 for (let i = 0; i < 3; i ++) {
@@ -182,6 +191,7 @@ const limit = (limitee, min, max) => {
 }
 
 /**
+ * Returns a new vector limited by the given bounds
  * @param {Vector} limitee
  * @param {Vector} min
  * @param {Vector} max
@@ -204,6 +214,10 @@ const overlap = (a, b) => {
 	return x_overlap && y_overlap;
 }
 
+/**
+ * @param {HTMLCanvasElement} canv
+ * @param {MouseEvent} event
+ */
 const get_mouse_pos = (canv, event) => {
 	const rect = canv.getBoundingClientRect();
 	return {
