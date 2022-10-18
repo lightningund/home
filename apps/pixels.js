@@ -1,5 +1,12 @@
 import { Button, Vector2 as Vector, logb } from "https://lightningund.github.io/Mathlib/mathlib.js";
 
+const UP_KEYS = ["KeyW", "ArrowUp"];
+const RIGHT_KEYS = ["KeyD", "ArrowRight"];
+const DOWN_KEYS = ["KeyS", "ArrowDown"];
+const LEFT_KEYS = ["KeyA", "ArrowLeft"];
+const WIDTH = 500;
+const HEIGHT = 500;
+
 class Rect {
 	constructor() {
 		this.SPD = 20;
@@ -48,10 +55,10 @@ class Player extends Rect {
 		this.mover = () => {
 			this.acc.x = 0;
 			this.acc.y = 0;
-			if (keys["KeyW"] || keys["ArrowUp"]) this.acc.y = -this.ACC;
-			if (keys["KeyS"] || keys["ArrowDown"]) this.acc.y = this.ACC;
-			if (keys["KeyA"] || keys["ArrowLeft"]) this.acc.x = -this.ACC;
-			if (keys["KeyD"] || keys["ArrowRight"]) this.acc.x = this.ACC;
+			if (check_keylist(UP_KEYS)) this.acc.y = -this.ACC;
+			if (check_keylist(DOWN_KEYS)) this.acc.y = this.ACC;
+			if (check_keylist(LEFT_KEYS)) this.acc.x = -this.ACC;
+			if (check_keylist(RIGHT_KEYS)) this.acc.x = this.ACC;
 		};
 	}
 }
@@ -123,9 +130,6 @@ class Goal extends Rect {
 // Array for what keys are currently being pressed
 let keys = [];
 
-const WIDTH = 800;
-const HEIGHT = 800;
-
 const canv = document.createElement("canvas");
 canv.width = WIDTH;
 canv.height = HEIGHT;
@@ -183,6 +187,10 @@ const bindings = {
 	"keydown": keydownfunc,
 	"keyup": keyupfunc
 };
+
+const check_keylist = keylist => {
+	return keylist.some(key => keys[key]);
+}
 
 const limit = (limitee, min, max) => {
 	if (limitee < min) return min;
