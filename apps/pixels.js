@@ -162,7 +162,7 @@ let diff = 0;
 /** @type {number} */
 let update_loop;
 
-for (let i = 0; i < 3; i ++) {
+for (let i = 0; i < 3; i++) {
 	const x = (WIDTH * (i * 2 + 1)) / 6 - BS / 2;
 	const y = (HEIGHT * 3) / 4 - BS / 2;
 	buttons[i] = new Button(() => start(i + 1), x, y, BS, BS);
@@ -171,7 +171,7 @@ for (let i = 0; i < 3; i ++) {
 const keydownfunc = e => {
 	keys[e.code] = true;
 	if (dead && e.code === "KeyE") {
-		diff ++;
+		diff++;
 		diff %= 3;
 		console.log(diff);
 	}
@@ -185,8 +185,8 @@ const bindings = {
 };
 
 const limit = (limitee, min, max) => {
-	if(limitee < min) return min;
-	if(limitee > max) return max;
+	if (limitee < min) return min;
+	if (limitee > max) return max;
 	return limitee;
 }
 
@@ -224,10 +224,13 @@ const get_mouse_pos = (canv, event) => {
 	};
 };
 
+/**
+ * @param {number} difficulty
+ */
 const start = difficulty => {
 	if (dead) {
 		enemies = [];
-		for (let i = 0; i < difficulty; i ++) {
+		for (let i = 0; i < difficulty; i++) {
 			enemies[i] = new Enemy(i, difficulty);
 		}
 
@@ -282,7 +285,7 @@ const render = () => {
 };
 
 const process_good = () => {
-	score ++;
+	score++;
 	goal_rect.randomize_pos();
 };
 
@@ -330,7 +333,7 @@ export const run = () => {
 
 	base_div.appendChild(canv);
 
-	for(const key of Object.keys(bindings)) {
+	for (const key of Object.keys(bindings)) {
 		window.addEventListener(key, bindings[key]);
 	}
 
@@ -343,7 +346,7 @@ export const run = () => {
 };
 
 export const stop = () => {
-	for(const key of Object.keys(bindings)) {
+	for (const key of Object.keys(bindings)) {
 		window.removeEventListener(key, bindings[key]);
 	}
 
