@@ -350,7 +350,7 @@ const process_good = () => {
 	goal_rect.randomize_pos();
 };
 
-const gameOver = () => {
+const game_over = () => {
 	context.fillStyle = "#FFFFFF";
 	context.fillRect(0, HEIGHT / 2, WIDTH, HEIGHT / 2);
 
@@ -402,7 +402,7 @@ export const run = () => {
 		if (!dead) {
 			update();
 			render();
-		} else gameOver();
+		} else game_over();
 	}, 1000 / 30);
 };
 
