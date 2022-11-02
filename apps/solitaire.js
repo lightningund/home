@@ -77,7 +77,7 @@ let fullscreen = false;
 const keydownfunc = e => {
 	if(e.code == "KeyF") flip_card_func(mouse_pos);
 	else if(e.code == "Space") make_fullscreen();
-	else if(e.code == "KeyE"){
+	else if(e.code == "KeyE") {
 		deck = new Deck();
 		deck.shuffle();
 		cols = [[], [], [], [], [], [], []];
@@ -170,7 +170,7 @@ const point_overlap = (pos, box) => {
  * @returns {boolean}
  */
 const clicked_col = pos => {
-	for(let i = 0; i < cols.length; i++){
+	for(let i = 0; i < cols.length; i++) {
 		const box = {x: col_coords[i], y: CSY, w: CW, h: CSY * cols[i].length + CH};
 		if(point_overlap(pos, box)) return true;
 	}
@@ -182,7 +182,7 @@ const clicked_col = pos => {
  * @returns {boolean}
  */
 const clicked_ace = pos => {
-	for(let i = 0; i < aces.length; i++){
+	for(let i = 0; i < aces.length; i++) {
 		if(point_overlap(pos, ace_boxes[i])) return true;
 	}
 	return false;
@@ -209,7 +209,7 @@ const clicked_flipped = pos => {
 const make_fullscreen = () => {
 	fullscreen = !fullscreen;
 
-	if(fullscreen){
+	if(fullscreen) {
 		if(canv.requestFullscreen)
 			canv.requestFullscreen();
 		else if(canv.mozRequestFullScreen)
@@ -233,10 +233,10 @@ const make_fullscreen = () => {
 }
 
 const init_vals = (fullscreen = false) => {
-	if(fullscreen){
+	if(fullscreen) {
 		const scrW = window.innerWidth;
 		const scrH = window.innerHeight;
-		if(scrW * (4 / 5) > scrH){
+		if(scrW * (4 / 5) > scrH) {
 			HEIGHT = scrH;
 			WIDTH = HEIGHT * (5 / 4);
 		} else {
@@ -259,12 +259,12 @@ const init_vals = (fullscreen = false) => {
 	ASX = WIDTH * 0.040; //Ace Spacing X
 	ASY = HEIGHT * 0.080; //Ace Spacing X
 
-	for(let i = 0; i < cols.length; i++){
+	for(let i = 0; i < cols.length; i++) {
 		let minX = (ASX * 2 + CW) + (i * (CSX + CW));
 		col_coords[i] = minX;
 	}
 
-	for(let i = 0; i < aces.length; i++){
+	for(let i = 0; i < aces.length; i++) {
 		let minY = ASY + (i * (CH + ASY));
 		ace_boxes[i] = {x: ASX, y: minY, w: CW, h: CH};
 	}
@@ -279,8 +279,8 @@ const init_vals = (fullscreen = false) => {
  * @returns {boolean}
  */
 const click_safety_check = click => {
-	if(selected_cards.length === 0){
-		switch (click.click_type){
+	if(selected_cards.length === 0) {
+		switch (click.click_type) {
 			case "column":
 				if(cols[click.index1].length === 0) return false;
 				break;
@@ -302,16 +302,16 @@ const flip_card_func = (mousePos, doubleClick = false) => {
 	if(!click_safety_check(click)) return;
 
 	if(click.click_type === "column") cols[click.index1][click.index2].flip();
-	else if(click.click_type === "deck" && !doubleClick){
-		if(deck.cards.length == 0){
-			for(const card of flipped_deck){
+	else if(click.click_type === "deck" && !doubleClick) {
+		if(deck.cards.length == 0) {
+			for(const card of flipped_deck) {
 				deck.addCard(click.flip());
 			}
 			flipped_deck = [];
 		} else flipped_deck.push(deck.takeTopCard().flip());
-	} else if(click.click_type === "flipped"){
-		if(flipped_deck.length == 0){
-			for(const card of deck.cards){
+	} else if(click.click_type === "flipped") {
+		if(flipped_deck.length == 0) {
+			for(const card of deck.cards) {
 				flipped_deck.push(click.flip());
 			}
 			deck = [];
@@ -320,11 +320,11 @@ const flip_card_func = (mousePos, doubleClick = false) => {
 }
 
 const deal = cards => {
-	for(let i = 0; i < cols.length; i++){
-		for(let j = i; j < cols.length; j++){
+	for(let i = 0; i < cols.length; i++) {
+		for(let j = i; j < cols.length; j++) {
 			let card = cards.takeTopCard();
 			cols[j][i] = card;
-			if(i == j){
+			if(i == j) {
 				cols[i][j].flipped = true;
 			}
 		}
@@ -343,7 +343,7 @@ const get_mouse_pos = (canv, event) => {
 const render = () => {
 	ctxt.fillStyle = "#00FF00";
 	ctxt.fillRect(0, 0, WIDTH, HEIGHT);
-	for(let i = 0; i < aces.length; i++){
+	for(let i = 0; i < aces.length; i++) {
 		let img_to_draw = aces[i].length == 0 ? Card.cardOutline : aces[i][aces[i].length - 1].sprite;
 		ctxt.drawImage(img_to_draw, ace_boxes[i].x, ace_boxes[i].y, CW, CH);
 	}
@@ -354,18 +354,18 @@ const render = () => {
 	let flip_img = flipped_deck.length == 0 ? Card.cardOutline : flipped_deck[flipped_deck.length - 1].sprite
 	ctxt.drawImage(flip_img, DX, FY, CW, CH);
 
-	for(let i = 0; i < cols.length; i++){
-		if(cols[i].length == 0){
+	for(let i = 0; i < cols.length; i++) {
+		if(cols[i].length == 0) {
 			ctxt.drawImage(Card.cardOutline, col_coords[i], CSY, CW, CH);
 		} else {
-			for(let j = 0; j < cols[i].length; j++){
+			for(let j = 0; j < cols[i].length; j++) {
 				let imgToDraw = cols[i][j].flipped ? cols[i][j].sprite : Card.cardBack;
 				ctxt.drawImage(imgToDraw, col_coords[i], j  * CSY + CSY, CW, CH);
 			}
 		}
 	}
 
-	for(let i = 0; i < selected_cards.length; i++){
+	for(let i = 0; i < selected_cards.length; i++) {
 		let imgToDraw = selected_cards[i].flipped ? selected_cards[i].sprite : Card.cardBack;
 		ctxt.drawImage(imgToDraw, mouse_pos.x - CW / 2, i * CSY + mouse_pos.y, CW, CH);
 	}
