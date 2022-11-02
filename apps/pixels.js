@@ -48,7 +48,7 @@ class Player extends Rect {
 		this.wall_limit = new Vector(WIDTH, HEIGHT).sub(this.size);
 
 		/**
-		 * Main update function, called every frame
+		 * Main update, called every frame
 		 */
 		this.update = () => {
 			this.mover();
@@ -117,7 +117,6 @@ class Enemy extends Rect {
 		};
 
 		/**
-		 * Move function for enemies
 		 * @param {Rect} target
 		 */
 		this.mover = target => {
@@ -154,6 +153,7 @@ class Goal extends Rect {
 	constructor() {
 		super();
 
+		/** @type {Vector} */
 		this.size = new Vector(40, 40);
 
 		/**
@@ -181,9 +181,14 @@ const context = canv.getContext("2d");
 context.textAlign = "center";
 context.font = "Bold 50px Consolas";
 
-const BS = 100; // Button Size
+/**
+ * Button Size
+ */
+const BS = 100;
 
-// Background and button colors for the different difficulties
+/**
+ * Background and button colors for the different difficulties
+ */
 const diff_cols = ["#00FF00", "#FF8000", "#FF0000"];
 
 /**
@@ -307,6 +312,11 @@ const start = difficulty => {
 	}
 };
 
+const process_good = () => {
+	score++;
+	goal_rect.randomize_pos();
+};
+
 const update = () => {
 	// Calling players built-in move function and built-in boundary check function
 	player.update();
@@ -323,21 +333,26 @@ const update = () => {
 	if (overlap(player, goal_rect)) process_good();
 };
 
+/**
+ * @param {Rect} rect
+ */
+const render_rect = (rect) => {
+	context.fillRect(rect.pos.x, rect.pos.y, rect.size.x, rect.size.y);
+}
+
 const render = () => {
 	// Background
 	context.fillStyle = diff_cols[diff] + "50";
 	context.fillRect(0, 0, WIDTH, HEIGHT);
 	// Player
 	context.fillStyle = "black";
-	context.fillRect(player.pos.x, player.pos.y, player.size.x, player.size.y);
+	render_rect(player);
 	// Goal
 	context.fillStyle = "purple";
-	context.fillRect(goal_rect.pos.x, goal_rect.pos.y, goal_rect.size.x, goal_rect.size.y);
+	render_rect(goal_rect);
 	// Enemies
 	context.fillStyle = "blue";
-	for (const enem of enemies) {
-		context.fillRect(enem.pos.x, enem.pos.y, enem.size.x, enem.size.y);
-	}
+	enemies.forEach(render_rect);
 	// Score
 	let x = 35 + Math.floor(logb(score, 10)) * 14;
 
@@ -345,13 +360,8 @@ const render = () => {
 	context.fillText(score.toString(10), x, 50);
 };
 
-const process_good = () => {
-	score++;
-	goal_rect.randomize_pos();
-};
-
 const game_over = () => {
-	context.fillStyle = "#FFFFFF";
+	context.fillStyle = "#FFF";
 	context.fillRect(0, HEIGHT / 2, WIDTH, HEIGHT / 2);
 
 	for (let i = 0; i < buttons.length; i++) {
