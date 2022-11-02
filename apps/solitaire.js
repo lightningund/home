@@ -41,7 +41,7 @@ class Card_Click {
 			}
 		};
 	}
-}
+};
 
 /** @type {Deck} */
 let deck = new Deck();
@@ -100,12 +100,13 @@ const keydownfunc = e => {
 
 const resizefunc = e => {
 	init_vals(fullscreen);
-}
+	render();
+};
 
 const mousemovefunc = e => {
 	mouse_pos = get_mouse_pos(canv, e);
 	if (selected_cards.length > 0) render();
-}
+};
 
 const mouseclickfunc = () => {
 	let click = new Card_Click();
@@ -121,7 +122,11 @@ const mouseclickfunc = () => {
 				cols[click.index1].push(...selected_cards);
 				selected_cards = [];
 			} else {
-				selected_cards.push(...cols[click.index1].splice(click.index2));
+				if (!cols[click.index1][click.index2].flipped) {
+					cols[click.index1][click.index2].flip();
+				} else {
+					selected_cards.push(...cols[click.index1].splice(click.index2));
+				}
 			}
 			break;
 		case "ace":
@@ -129,7 +134,7 @@ const mouseclickfunc = () => {
 				aces[click.index1].push(...selected_cards);
 				selected_cards = [];
 			} else {
-				selected_cards.push(flipped_deck.pop());
+				selected_cards.push(aces[click.index1].pop());
 			}
 			break;
 		case "flipped":
@@ -137,11 +142,11 @@ const mouseclickfunc = () => {
 				flipped_deck.push(...selected_cards);
 				selected_cards = [];
 			} else {
-				selected_cards.push(aces[click.index1].pop());
+				selected_cards.push(flipped_deck.pop());
 			}
 			break;
 		case "deck":
-			if (!empty) {
+			if (empty) {
 				if (deck.cards.length === 0) {
 					for (const card of flipped_deck) {
 						deck.addCard(card.flip());
@@ -156,7 +161,7 @@ const mouseclickfunc = () => {
 	}
 
 	render();
-}
+};
 
 const bindings = {
 	"keydown": keydownfunc,
@@ -172,7 +177,7 @@ const point_overlap = (pos, box) => {
 	const x_overlap = pos.x > box.x && pos.x < box.x + box.w;
 	const y_overlap = pos.y > box.y && pos.y < box.y + box.h;
 	return x_overlap && y_overlap;
-}
+};
 
 /**
  * @param {Vector} pos
@@ -184,7 +189,7 @@ const clicked_col = pos => {
 		if (point_overlap(pos, box)) return true;
 	}
 	return false;
-}
+};
 
 /**
  * @param {Vector} pos
@@ -195,7 +200,7 @@ const clicked_ace = pos => {
 		if (point_overlap(pos, ace_boxes[i])) return true;
 	}
 	return false;
-}
+};
 
 /**
  * @param {Vector} pos
@@ -204,7 +209,7 @@ const clicked_ace = pos => {
 const clicked_deck = pos => {
 	let box = {x: DX, y: DY, w: CW, h: CH};
 	return point_overlap(pos, box);
-}
+};
 
 /**
  * @param {Vector} pos
@@ -213,7 +218,7 @@ const clicked_deck = pos => {
 const clicked_flipped = pos => {
 	let box = {x: DX, y: FY, w: CW, h: CH};
 	return point_overlap(pos, box);
-}
+};
 
 const make_fullscreen = () => {
 	fullscreen = !fullscreen;
@@ -231,7 +236,7 @@ const make_fullscreen = () => {
 	}
 
 	init_vals(fullscreen);
-}
+};
 
 const init_vals = (fullscreen = false) => {
 	if (fullscreen) {
@@ -273,7 +278,7 @@ const init_vals = (fullscreen = false) => {
 	DX = WIDTH - (ASX + CW); //Deck X
 	DY = 2 * CSY; //Deck Y
 	FY = CSY + DY + CH; //Flipped Y
-}
+};
 
 /**
  * @param {Card_Click} click
@@ -295,7 +300,7 @@ const click_safety_check = click => {
 	}
 
 	return true;
-}
+};
 
 const flip_card_func = (mousePos, doubleClick = false) => {
 	let click = new Card_Click();
@@ -319,7 +324,9 @@ const flip_card_func = (mousePos, doubleClick = false) => {
 			deck = [];
 		} else deck.cards.unshift(flipped_deck.pop().flip());
 	}
-}
+
+	render();
+};
 
 const deal = cards => {
 	for (let i = 0; i < cols.length; i++) {
@@ -329,7 +336,7 @@ const deal = cards => {
 			if (i === j) cols[i][j].flipped = true;
 		}
 	}
-}
+};
 
 //Get the mouse position
 const get_mouse_pos = (canv, event) => {
@@ -338,7 +345,7 @@ const get_mouse_pos = (canv, event) => {
 		x: event.clientX - rect.left,
 		y: event.clientY - rect.top
 	};
-}
+};
 
 const render = () => {
 	ctxt.fillStyle = "#00FF00";
@@ -369,7 +376,7 @@ const render = () => {
 		let imgToDraw = selected_cards[i].flipped ? selected_cards[i].sprite : Card.cardBack;
 		ctxt.drawImage(imgToDraw, mouse_pos.x - CW / 2, i * CSY + mouse_pos.y, CW, CH);
 	}
-}
+};
 
 export const run = (() => {
 	const baseDiv = document.getElementById("appDiv");
@@ -389,6 +396,8 @@ export const run = (() => {
 	deck.shuffle();
 
 	deal(deck);
+
+	render();
 });
 
 export const stop = () => {
