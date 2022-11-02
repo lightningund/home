@@ -28,7 +28,7 @@ class Card_Click {
 				this.click_type = "column";
 				this.index1 = Math.floor((pos.x - (ASX * 2 + CW)) / (CSX + CW));
 				this.index2 = Math.floor((pos.y - CSY) / CSY);
-				if(this.index2 >= cols[this.index1].length) this.index2 = cols[this.index1].length - 1;
+				if (this.index2 >= cols[this.index1].length) this.index2 = cols[this.index1].length - 1;
 			} else if (clicked_ace(pos)) {
 				this.click_type = "ace";
 				this.index1 = Math.floor(pos.y / (ASY + CH));
@@ -95,20 +95,20 @@ const resizefunc = e => {
 
 const mousemovefunc = e => {
 	mouse_pos = get_mouse_pos(canv, e);
-	if(selected_cards.length > 0) render();
+	if (selected_cards.length > 0) render();
 }
 
 const mouseclickfunc = () => {
 	let click = new Card_Click();
 	click.check_pos(mouse_pos);
 
-	if(!click_safety_check(click)) return;
+	if (!click_safety_check(click)) return;
 
 	const empty = selected_cards.length === 0;
 
 	switch (click.click_type) {
 		case "column":
-			if(!empty) {
+			if (!empty) {
 				cols[click.index1].push(...selected_cards);
 				selected_cards = [];
 			} else {
@@ -116,7 +116,7 @@ const mouseclickfunc = () => {
 			}
 			break;
 		case "ace":
-			if(!empty) {
+			if (!empty) {
 				aces[click.index1].push(...selected_cards);
 				selected_cards = [];
 			} else {
@@ -124,7 +124,7 @@ const mouseclickfunc = () => {
 			}
 			break;
 		case "flipped":
-			if(!empty) {
+			if (!empty) {
 				flipped_deck.push(...selected_cards);
 				selected_cards = [];
 			} else {
@@ -132,9 +132,9 @@ const mouseclickfunc = () => {
 			}
 			break;
 		case "deck":
-			if(!empty) {
-				if(deck.cards.length === 0) {
-					for(const card of flipped_deck) {
+			if (!empty) {
+				if (deck.cards.length === 0) {
+					for (const card of flipped_deck) {
 						deck.addCard(card.flip());
 					}
 					flipped_deck = [];
@@ -142,7 +142,7 @@ const mouseclickfunc = () => {
 			}
 			break;
 		default:
-			if(click.type !== undefined) selected_cards = [];
+			if (click.type !== undefined) selected_cards = [];
 			break;
 	}
 
@@ -170,9 +170,9 @@ const point_overlap = (pos, box) => {
  * @returns {boolean}
  */
 const clicked_col = pos => {
-	for(let i = 0; i < cols.length; i++) {
+	for (let i = 0; i < cols.length; i++) {
 		const box = {x: col_coords[i], y: CSY, w: CW, h: CSY * cols[i].length + CH};
-		if(point_overlap(pos, box)) return true;
+		if (point_overlap(pos, box)) return true;
 	}
 	return false;
 }
@@ -182,8 +182,8 @@ const clicked_col = pos => {
  * @returns {boolean}
  */
 const clicked_ace = pos => {
-	for(let i = 0; i < aces.length; i++) {
-		if(point_overlap(pos, ace_boxes[i])) return true;
+	for (let i = 0; i < aces.length; i++) {
+		if (point_overlap(pos, ace_boxes[i])) return true;
 	}
 	return false;
 }
@@ -209,34 +209,26 @@ const clicked_flipped = pos => {
 const make_fullscreen = () => {
 	fullscreen = !fullscreen;
 
-	if(fullscreen) {
-		if(canv.requestFullscreen)
-			canv.requestFullscreen();
-		else if(canv.mozRequestFullScreen)
-			canv.mozRequestFullScreen();
-		else if(canv.webkitRequestFullscreen)
-			canv.webkitRequestFullscreen();
-		else if(canv.msRequestFullscreen)
-			canv.msRequestFullscreen();
+	if (fullscreen) {
+		if (canv.requestFullscreen) canv.requestFullscreen();
+		else if (canv.mozRequestFullScreen) canv.mozRequestFullScreen();
+		else if (canv.webkitRequestFullscreen) canv.webkitRequestFullscreen();
+		else if (canv.msRequestFullscreen) canv.msRequestFullscreen();
 	} else {
-		if(document.exitFullscreen)
-			document.exitFullscreen();
-		else if(document.mozCancelFullScreen)
-			document.mozCancelFullScreen();
-		else if(document.webkitExitFullscreen)
-			document.webkitExitFullscreen();
-		else if(document.msExitFullscreen)
-			document.msExitFullscreen();
+		if (document.exitFullscreen) document.exitFullscreen();
+		else if (document.mozCancelFullScreen) document.mozCancelFullScreen();
+		else if (document.webkitExitFullscreen) document.webkitExitFullscreen();
+		else if (document.msExitFullscreen) document.msExitFullscreen();
 	}
 
 	init_vals(fullscreen);
 }
 
 const init_vals = (fullscreen = false) => {
-	if(fullscreen) {
+	if (fullscreen) {
 		const scrW = window.innerWidth;
 		const scrH = window.innerHeight;
-		if(scrW * (4 / 5) > scrH) {
+		if (scrW * (4 / 5) > scrH) {
 			HEIGHT = scrH;
 			WIDTH = HEIGHT * (5 / 4);
 		} else {
@@ -259,12 +251,12 @@ const init_vals = (fullscreen = false) => {
 	ASX = WIDTH * 0.040; //Ace Spacing X
 	ASY = HEIGHT * 0.080; //Ace Spacing X
 
-	for(let i = 0; i < cols.length; i++) {
+	for (let i = 0; i < cols.length; i++) {
 		let minX = (ASX * 2 + CW) + (i * (CSX + CW));
 		col_coords[i] = minX;
 	}
 
-	for(let i = 0; i < aces.length; i++) {
+	for (let i = 0; i < aces.length; i++) {
 		let minY = ASY + (i * (CH + ASY));
 		ace_boxes[i] = {x: ASX, y: minY, w: CW, h: CH};
 	}
@@ -279,19 +271,20 @@ const init_vals = (fullscreen = false) => {
  * @returns {boolean}
  */
 const click_safety_check = click => {
-	if(selected_cards.length === 0) {
+	if (selected_cards.length === 0) {
 		switch (click.click_type) {
 			case "column":
-				if(cols[click.index1].length === 0) return false;
+				if (cols[click.index1].length === 0) return false;
 				break;
 			case "flipped":
-				if(flipped_deck.length === 0) return false;
+				if (flipped_deck.length === 0) return false;
 				break;
 			case "ace":
-				if(aces[click.index1].length === 0) return false;
+				if (aces[click.index1].length === 0) return false;
 				break;
 		}
 	}
+
 	return true;
 }
 
@@ -299,19 +292,19 @@ const flip_card_func = (mousePos, doubleClick = false) => {
 	let click = new Card_Click();
 	click.check_pos(mousePos);
 
-	if(!click_safety_check(click)) return;
+	if (!click_safety_check(click)) return;
 
-	if(click.click_type === "column") cols[click.index1][click.index2].flip();
-	else if(click.click_type === "deck" && !doubleClick) {
-		if(deck.cards.length == 0) {
-			for(const card of flipped_deck) {
+	if (click.click_type === "column") cols[click.index1][click.index2].flip();
+	else if (click.click_type === "deck" && !doubleClick) {
+		if (deck.cards.length == 0) {
+			for (const card of flipped_deck) {
 				deck.addCard(click.flip());
 			}
 			flipped_deck = [];
 		} else flipped_deck.push(deck.takeTopCard().flip());
-	} else if(click.click_type === "flipped") {
-		if(flipped_deck.length == 0) {
-			for(const card of deck.cards) {
+	} else if (click.click_type === "flipped") {
+		if (flipped_deck.length == 0) {
+			for (const card of deck.cards) {
 				flipped_deck.push(click.flip());
 			}
 			deck = [];
@@ -320,13 +313,11 @@ const flip_card_func = (mousePos, doubleClick = false) => {
 }
 
 const deal = cards => {
-	for(let i = 0; i < cols.length; i++) {
-		for(let j = i; j < cols.length; j++) {
+	for (let i = 0; i < cols.length; i++) {
+		for (let j = i; j < cols.length; j++) {
 			let card = cards.takeTopCard();
 			cols[j][i] = card;
-			if(i == j) {
-				cols[i][j].flipped = true;
-			}
+			if (i === j) cols[i][j].flipped = true;
 		}
 	}
 }
@@ -343,7 +334,7 @@ const get_mouse_pos = (canv, event) => {
 const render = () => {
 	ctxt.fillStyle = "#00FF00";
 	ctxt.fillRect(0, 0, WIDTH, HEIGHT);
-	for(let i = 0; i < aces.length; i++) {
+	for (let i = 0; i < aces.length; i++) {
 		let img_to_draw = aces[i].length == 0 ? Card.cardOutline : aces[i][aces[i].length - 1].sprite;
 		ctxt.drawImage(img_to_draw, ace_boxes[i].x, ace_boxes[i].y, CW, CH);
 	}
@@ -354,18 +345,18 @@ const render = () => {
 	let flip_img = flipped_deck.length == 0 ? Card.cardOutline : flipped_deck[flipped_deck.length - 1].sprite
 	ctxt.drawImage(flip_img, DX, FY, CW, CH);
 
-	for(let i = 0; i < cols.length; i++) {
-		if(cols[i].length == 0) {
+	for (let i = 0; i < cols.length; i++) {
+		if (cols[i].length == 0) {
 			ctxt.drawImage(Card.cardOutline, col_coords[i], CSY, CW, CH);
 		} else {
-			for(let j = 0; j < cols[i].length; j++) {
+			for (let j = 0; j < cols[i].length; j++) {
 				let imgToDraw = cols[i][j].flipped ? cols[i][j].sprite : Card.cardBack;
 				ctxt.drawImage(imgToDraw, col_coords[i], j  * CSY + CSY, CW, CH);
 			}
 		}
 	}
 
-	for(let i = 0; i < selected_cards.length; i++) {
+	for (let i = 0; i < selected_cards.length; i++) {
 		let imgToDraw = selected_cards[i].flipped ? selected_cards[i].sprite : Card.cardBack;
 		ctxt.drawImage(imgToDraw, mouse_pos.x - CW / 2, i * CSY + mouse_pos.y, CW, CH);
 	}
@@ -394,7 +385,7 @@ export const run = (() => {
 });
 
 export const stop = () => {
-	for(const key of Object.keys(bindings)) {
+	for (const key of Object.keys(bindings)) {
 		window.removeEventListener(key, bindings[key]);
 	}
 };
