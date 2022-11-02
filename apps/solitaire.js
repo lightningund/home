@@ -75,18 +75,27 @@ let WIDTH, HEIGHT, CW, CH, CSX, CSY, ASX, ASY, DX, DY, FY;
 let fullscreen = false;
 
 const keydownfunc = e => {
-	if(e.code == "KeyF") flip_card_func(mouse_pos);
-	else if(e.code == "Space") make_fullscreen();
-	else if(e.code == "KeyE") {
-		deck = new Deck();
-		deck.shuffle();
-		cols = [[], [], [], [], [], [], []];
-		aces = [[], [], [], []];
-		flipped_deck = [];
-		selected_cards = [];
+	switch (e.code) {
+		case "KeyF":
+			flip_card_func(mouse_pos);
+			break;
+		case "Space":
+			make_fullscreen();
+			break;
+		case "KeyS":
+			mouseClick();
+			break;
+		case "KeyE":
+			deck = new Deck();
+			deck.shuffle();
+			cols = [[], [], [], [], [], [], []];
+			aces = [[], [], [], []];
+			flipped_deck = [];
+			selected_cards = [];
 
-		deal(deck);
-	} else if(e.code == "KeyS") mouseClick();
+			deal(deck);
+			break;
+	}
 };
 
 const resizefunc = e => {
@@ -369,6 +378,10 @@ export const run = (() => {
 	canv.addEventListener("dblclick", e => flip_card_func(mouse_pos, true));
 	canv.addEventListener("mousemove", mousemovefunc);
 
+	for (const key of Object.keys(bindings)) {
+		window.addEventListener(key, bindings[key]);
+	}
+
 	baseDiv.appendChild(canv);
 
 	init_vals();
@@ -376,12 +389,6 @@ export const run = (() => {
 	deck.shuffle();
 
 	deal(deck);
-
-	for(const key of Object.keys(bindings)) {
-		window.addEventListener(key, bindings[key]);
-	}
-
-	init_vals(fullscreen);
 });
 
 export const stop = () => {
