@@ -160,9 +160,9 @@ const bindings = {
  * @returns {boolean}
  */
 const point_overlap = (pos, box) => {
-	const xOverlap = pos.x > box.x && pos.x < box.x + box.w;
-	const yOverlap = pos.y > box.y && pos.y < box.y + box.h;
-	return xOverlap && yOverlap;
+	const x_overlap = pos.x > box.x && pos.x < box.x + box.w;
+	const y_overlap = pos.y > box.y && pos.y < box.y + box.h;
+	return x_overlap && y_overlap;
 }
 
 /**
@@ -232,8 +232,8 @@ const make_fullscreen = () => {
 	init_vals(fullscreen);
 }
 
-const init_vals = (fullScreen = false) => {
-	if(fullScreen){
+const init_vals = (fullscreen = false) => {
+	if(fullscreen){
 		const scrW = window.innerWidth;
 		const scrH = window.innerHeight;
 		if(scrW * (4 / 5) > scrH){
@@ -344,15 +344,15 @@ const render = () => {
 	ctxt.fillStyle = "#00FF00";
 	ctxt.fillRect(0, 0, WIDTH, HEIGHT);
 	for(let i = 0; i < aces.length; i++){
-		let imageToDraw = aces[i].length == 0 ? Card.cardOutline : aces[i][aces[i].length - 1].sprite;
-		ctxt.drawImage(imageToDraw, ace_boxes[i].x, ace_boxes[i].y, CW, CH);
+		let img_to_draw = aces[i].length == 0 ? Card.cardOutline : aces[i][aces[i].length - 1].sprite;
+		ctxt.drawImage(img_to_draw, ace_boxes[i].x, ace_boxes[i].y, CW, CH);
 	}
 
-	let deckImage = deck.cards.length == 0 ? Card.cardOutline : Card.cardBack;
-	ctxt.drawImage(deckImage, DX, DY, CW, CH);
+	let deck_img = deck.cards.length == 0 ? Card.cardOutline : Card.cardBack;
+	ctxt.drawImage(deck_img, DX, DY, CW, CH);
 
-	let flipImage = flipped_deck.length == 0 ? Card.cardOutline : flipped_deck[flipped_deck.length - 1].sprite
-	ctxt.drawImage(flipImage, DX, FY, CW, CH);
+	let flip_img = flipped_deck.length == 0 ? Card.cardOutline : flipped_deck[flipped_deck.length - 1].sprite
+	ctxt.drawImage(flip_img, DX, FY, CW, CH);
 
 	for(let i = 0; i < cols.length; i++){
 		if(cols[i].length == 0){
