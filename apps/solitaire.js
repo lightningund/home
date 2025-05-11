@@ -120,7 +120,7 @@ const mouseclickfunc = () => {
 				aces[click.index1].push(...selectedCards);
 				selectedCards = [];
 			} else {
-				selectedCards.push(flippedDeck.pop());
+				selectedCards.push(aces[click.index1].pop());
 			}
 			break;
 		case "flipped":
@@ -128,7 +128,7 @@ const mouseclickfunc = () => {
 				flippedDeck.push(...selectedCards);
 				selectedCards = [];
 			} else {
-				selectedCards.push(aces[click.index1].pop());
+				selectedCards.push(flippedDeck.pop());
 			}
 			break;
 		case "deck":

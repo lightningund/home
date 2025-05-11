@@ -53,8 +53,8 @@ class Cell {
 	}
 }
 
-const WIDTH = 800;
-const HEIGHT = 800;
+const WIDTH = 5000;
+const HEIGHT = 5000;
 
 const canv = document.createElement("canvas");
 canv.width = WIDTH;
@@ -187,7 +187,7 @@ export const run = (() => {
 		} else {
 			// generate();
 		}
-	}, 1000 / 60);
+	}, 1);
 });
 
 export const stop = () => {

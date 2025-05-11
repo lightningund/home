@@ -29,9 +29,9 @@ class Player extends Rect {
 	constructor() {
 		super();
 
-		this.pos = new Vector(WIDTH / 2, HEIGHT - 20);
+		this.pos = new Vector(canv.width / 2, canv.height - 20);
 
-		this.wallLimit = new Vector(WIDTH, HEIGHT).sub(this.size);
+		this.wallLimit = new Vector(canv.width, canv.height).sub(this.size);
 
 		this.boundCheck = () => {
 			vectorLimit(this.vel, {x : -this.SPD, y : -this.SPD}, {x : this.SPD, y : this.SPD});
@@ -60,7 +60,7 @@ class Enemy extends Rect {
 	constructor(enemNum, diff) {
 		super();
 
-		this.enemPosInc = (WIDTH - 40) / 2;
+		this.enemPosInc = (canv.width - 40) / 2;
 		this.BASE_REPEL_FORCE = 5000;
 
 		this.pos = new Vector(this.enemPosInc * enemNum, 20);
@@ -113,8 +113,8 @@ class Goal extends Rect {
 		// Randomize the position of the goal Rect
 		this.randomizePos = () => {
 			this.pos = new Vector(
-				Math.random() * (WIDTH - 40),
-				Math.random() * (HEIGHT - 40)
+				Math.random() * (canv.width - 40),
+				Math.random() * (canv.height - 40)
 			);
 		};
 	}
@@ -123,17 +123,12 @@ class Goal extends Rect {
 // Array for what keys are currently being pressed
 let keys = [];
 
-const WIDTH = 800;
-const HEIGHT = 800;
+const { canv, context } = window.initCanvas();
 
-const canv = document.createElement("canvas");
-canv.width = WIDTH;
-canv.height = HEIGHT;
-const context = canv.getContext("2d");
 context.textAlign = "center";
 context.font = "Bold 50px Consolas";
 
-const BS = 100; // Button Size
+const BS = () => canv.width / 4; // Button Size
 
 // Background and button colors for the different difficulties
 const diffCols = ["#00FF00", "#FF8000", "#FF0000"];
@@ -152,12 +147,6 @@ let dead = true;
 let diff = 0;
 
 let updateLoop;
-
-for (let i = 0; i < 3; i ++) {
-	const x = (WIDTH * (i * 2 + 1)) / 6 - BS / 2;
-	const y = (HEIGHT * 3) / 4 - BS / 2;
-	buttons[i] = new Button(() => start(i + 1), x, y, BS, BS);
-}
 
 const keydownfunc = e => {
 	keys[e.code] = true;
@@ -227,7 +216,7 @@ const start = difficulty => {
 		score = 0;
 		onMenu = false;
 		context.fillStyle = diffCols[diff];
-		context.fillRect(0, 0, WIDTH, HEIGHT);
+		context.fillRect(0, 0, canv.width, canv.height);
 	}
 };
 
@@ -250,7 +239,7 @@ const update = () => {
 const render = () => {
 	// Background
 	context.fillStyle = diffCols[diff] + "50";
-	context.fillRect(0, 0, WIDTH, HEIGHT);
+	context.fillRect(0, 0, canv.width, canv.height);
 	// Player
 	context.fillStyle = "black";
 	context.fillRect(player.pos.x, player.pos.y, player.size.x, player.size.y);
@@ -276,7 +265,7 @@ const processGood = () => {
 
 const gameOver = () => {
 	context.fillStyle = "#FFFFFF";
-	context.fillRect(0, HEIGHT / 2, WIDTH, HEIGHT / 2);
+	context.fillRect(0, canv.height / 2, canv.width, canv.height / 2);
 
 	for (let i = 0; i < buttons.length; i++) {
 		context.fillStyle = diffCols[i];
@@ -293,9 +282,9 @@ const gameOver = () => {
 		context.fillStyle = "black";
 		onMenu = true;
 		dead = true;
-		context.clearRect(0, 0, WIDTH, HEIGHT);
-		context.fillText("High Score: " + bestScores[diff], WIDTH / 2, 100);
-		context.fillText("Last Score: " + score, WIDTH / 2, 200);
+		context.clearRect(0, 0, canv.width, canv.height);
+		context.fillText("High Score: " + bestScores[diff], canv.width / 2, 100);
+		context.fillText("Last Score: " + score, canv.width / 2, 200);
 
 		bestScores[diff] = score > bestScores[diff] ? score : bestScores[diff];
 	}
@@ -320,6 +309,12 @@ export const run = () => {
 
 	for(const key of Object.keys(bindings)) {
 		window.addEventListener(key, bindings[key]);
+	}
+
+	for (let i = 0; i < 3; i ++) {
+		const x = (canv.width * (i * 2 + 1)) / 6 - BS() / 2;
+		const y = (canv.height * 3) / 4 - BS() / 2;
+		buttons[i] = new Button(() => start(i + 1), x, y, BS(), BS());
 	}
 
 	updateLoop = setInterval(() => {
