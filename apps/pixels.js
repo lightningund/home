@@ -4,7 +4,6 @@ class Rect {
 	constructor() {
 		this.SPD = 20;
 		this.ACC = 7;
-		this.FRICTION = 0.8;
 
 		/** @type {Vector} */
 		this.pos = new Vector();
@@ -28,6 +27,8 @@ class Rect {
 class Player extends Rect {
 	constructor() {
 		super();
+
+		this.FRICTION = 0.8;
 
 		this.pos = new Vector(canv.width / 2, canv.height - 20);
 
@@ -60,6 +61,8 @@ class Enemy extends Rect {
 	constructor(enemNum, diff) {
 		super();
 
+		this.FRICTION = 0.998;
+
 		this.enemPosInc = (canv.width - 40) / 2;
 		this.BASE_REPEL_FORCE = 5000;
 
@@ -69,11 +72,15 @@ class Enemy extends Rect {
 		this.update = (target, enems) => {
 			this.acc.x = 0;
 			this.acc.y = 0;
-			this.vel.scale(0.9);
+
 			this.mover(target);
+
+			// this.vel.scale(0.9);
+			this.acc.add(Vector.scale(this.vel, -this.vel.len() * (1 - this.FRICTION)));
+
 			this.repel(enems);
 			this.updatePos();
-			this.speedup *= 1.0001;
+			this.speedup *= 1.0002;
 		};
 
 		// Move function for enemies
@@ -85,9 +92,7 @@ class Enemy extends Rect {
 			else if (diff === 2) divisor = 50;
 			else if (diff === 3) divisor = 25;
 
-			divisor /= this.speedup;
-
-			this.acc = dx.scale(1 / divisor);
+			this.acc = dx.scale(this.speedup / divisor);
 		};
 
 		this.repel = enems => {
@@ -123,7 +128,10 @@ class Goal extends Rect {
 // Array for what keys are currently being pressed
 let keys = [];
 
-const { canv, context } = window.initCanvas();
+const canv = document.createElement("canvas");
+canv.width = 500;
+canv.height = 500;
+const context = canv.getContext("2d");
 
 context.textAlign = "center";
 context.font = "Bold 50px Consolas";
