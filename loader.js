@@ -1,5 +1,5 @@
 const links = [
-	["Home", ""],
+	["Clear", ""],
 	["Pixels", "pixels.js"],
 	["Voronoi Mapper", "voronoi.js"],
 	["Maze Generator", "maze.js"],
@@ -40,21 +40,21 @@ const load_app = async file => {
 	}
 }
 
-const navBase = document.createElement("navbar");
-const ul = document.createElement("ul");
+document.addEventListener("DOMContentLoaded", function () {
+	const ul = document.querySelector("nav > ul");
 
-// Instantiate all the links
-for (const link of links) {
-	const li = document.createElement("li");
-	const a = document.createElement("a");
-	a.innerText = link[0];
-	a.addEventListener("click", () => { load_app(link[1]); });
-	li.appendChild(a);
-	ul.appendChild(li);
-}
+	// Add in spacing to seperate out the app buttons from the main navigation buttons
+	ul.appendChild(document.createElement("br"));
+	ul.appendChild(document.createElement("br"));
+	ul.appendChild(document.createElement("br"));
 
-navBase.appendChild(ul);
-navBase.appendChild(document.createElement("br"));
-navBase.appendChild(document.createElement("br"));
-
-body.appendChild(navBase);
+	// Instantiate all the links
+	for (const link of links) {
+		const li = document.createElement("li");
+		const a = document.createElement("a");
+		a.innerText = link[0];
+		a.addEventListener("click", () => { load_app(link[1]); });
+		li.appendChild(a);
+		ul.appendChild(li);
+	}
+});
