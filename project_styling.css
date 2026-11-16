@@ -1,37 +1,50 @@
-.projects h3 {
-	color: #F00;
-	margin: 0;
-	padding: 0;
-	border: 0;
-}
-
+/* Set the main project div to have a black border and some internal padding, as well as a max width */
 .projects {
 	width: min(80vw, 10in);
+	margin-top: 15px;
 	padding: 15px;
 	border-color: black;
 	border-width: 5px;
 	border-style: solid;
 }
 
+/* Make sure the header of it is nestled right up to the border */
+.projects h3 {
+	margin: 0;
+	padding: 0;
+	border: 0;
+}
+
+/* Give a similar treatment to the individual projects as the main div */
 .projects > div {
 	margin-top: 15px;
 	padding: 15px;
-	border-color: red;
+	border-color: #444;
 	border-width: 5px;
 	border-style: solid;
 }
 
+/* And likewise with the project headers */
 .projects > div > h4 {
 	margin: 0;
 	padding: 0;
 	border: 0;
 }
 
+/* Disable the project page links as they don't exist yet */
+.projects > div h4 > a {
+	color: #A00;
+	pointer-events: none;
+	cursor: default;
+}
+
+/* Shrink the lines of text so they aren't spaced apart */
 .projects > div > p {
 	margin-top: 0;
 	margin-bottom: 0;
 }
 
+/* Make the github link appear on the right side of the box */
 p:has(> .github) {
 	text-align: right;
 }
