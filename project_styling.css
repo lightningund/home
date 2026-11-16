@@ -1,0 +1,37 @@
+.projects h3 {
+	color: #F00;
+	margin: 0;
+	padding: 0;
+	border: 0;
+}
+
+.projects {
+	width: 80vw;
+	padding: 15px;
+	border-color: black;
+	border-width: 5px;
+	border-style: solid;
+}
+
+.projects > div {
+	margin-top: 15px;
+	padding: 15px;
+	border-color: red;
+	border-width: 5px;
+	border-style: solid;
+}
+
+.projects > div > h4 {
+	margin: 0;
+	padding: 0;
+	border: 0;
+}
+
+.projects > div > p {
+	margin-top: 0;
+	margin-bottom: 0;
+}
+
+p:has(> .github) {
+	text-align: right;
+}

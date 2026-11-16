@@ -1,0 +1,6 @@
+padding is the space from the edge to the inside that you can't have objects
+margin is the minimum space the object requires around itself
+
+margins can overlap with each other, just not with content
+	but only if both elements are `display: block` maybe??
+margins can't overlap with padding
