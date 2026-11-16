@@ -17,14 +17,17 @@ const body = document.querySelector("body");
 let appscript = undefined;
 
 const load_app = async file => {
+	// Attempt to stop the currently running app
 	if (appscript !== undefined) {
 		try {
 			appscript.stop();
 		} catch (e) {}
 	}
 
+	// Get rid of the previous app div
 	body.removeChild(body.querySelector("#appDiv"));
 
+	// Create a brand new one for the new app
 	let appDiv = document.createElement("div");
 	appDiv.id = "appDiv";
 	body.appendChild(appDiv);
@@ -40,6 +43,7 @@ const load_app = async file => {
 const navBase = document.createElement("navbar");
 const ul = document.createElement("ul");
 
+// Instantiate all the links
 for (const link of links) {
 	const li = document.createElement("li");
 	const a = document.createElement("a");
