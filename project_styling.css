@@ -6,7 +6,7 @@
 }
 
 .projects {
-	width: 80vw;
+	width: min(80vw, 10in);
 	padding: 15px;
 	border-color: black;
 	border-width: 5px;
